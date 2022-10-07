@@ -1,6 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>通过Python完成在实际工作中对文件目录操作的4种特定需求 [转载]</title>
+    <url>/2022/10/01/doc_oper/</url>
+    <content><![CDATA[<h1 id="通过Python完成在实际工作中关于文件目录操作的4种特定需求-转载"><a href="#通过Python完成在实际工作中关于文件目录操作的4种特定需求-转载" class="headerlink" title="通过Python完成在实际工作中关于文件目录操作的4种特定需求 [转载]"></a>通过Python完成在实际工作中关于文件目录操作的4种特定需求 [转载]</h1><p>原文链接：<a href="https://rimbaud-lee.github.io/2021/08/19/Doc_Oper/">邓小闲的小楼 (rimbaud-lee.github.io)</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>对于工作时上级安排给你的繁复琐碎的重复性工作，为何不让机器去做本该是机器来做的事情。</p>
+<p>人生苦短，你用Python。</p>
+<p>另，此程序无需修改源码，任意一台电脑上只要搭建环境，双击程序及可运行。</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>Python3</p>
+<h2 id="具体需求"><a href="#具体需求" class="headerlink" title="具体需求"></a>具体需求</h2><h3 id="1-将文件夹中特定格式文件提取到指定文件夹"><a href="#1-将文件夹中特定格式文件提取到指定文件夹" class="headerlink" title="1. 将文件夹中特定格式文件提取到指定文件夹"></a>1. 将文件夹中特定格式文件提取到指定文件夹</h3><p>不论文件夹结构有多复杂，此程序适用于所有文件夹结构。</p>
+<p>且此程序通过复制方式提取文件，而非移动。</p>
+<pre><code class="python"># os库进行目录提取，shutil库进行文件复制
+import os, shutil
+
+def copy_file(path1, path2, key_word):
+    # num的引入是为了防止重名文件的出现，若特定格式文件不存在同名现象，大可去除num
+    num = 1
+    for foldName, subfolders, filenames in os.walk(path1):
+        for filename in filenames:
+            if filename.endswith(key_word):
+                new_name = filename.replace(filename, &quot;%i&quot;+&quot;_&quot;+filename)%num
+                shutil.copyfile(os.path.join(foldName, filename), os.path.join(path2, new_name))
+                print(filename, &quot;copy as&quot;, new_name)
+                num += 1
+
+if __name__ == &#39;__main__&#39;:
+    path1 = input(&quot;请输入你想复制的文件夹的绝对路径：&quot;)
+    path2 = input(&quot;请输入你想复制进的文件夹的绝对路径：&quot;)
+    key_word = input(&quot;请输入你想复制文件的后缀名：&quot;)
+    copy_file(path1, path2, key_word)
+    
+</code></pre>
+<h3 id="2-将文件夹特定格式文件按原文件夹目录格式提取到指定文件夹"><a href="#2-将文件夹特定格式文件按原文件夹目录格式提取到指定文件夹" class="headerlink" title="2. 将文件夹特定格式文件按原文件夹目录格式提取到指定文件夹"></a>2. 将文件夹特定格式文件按原文件夹目录格式提取到指定文件夹</h3><p>此程序适用于所有文件夹结构。</p>
+<p>且此程序通过重新写入文件方式提取文件，而非复制 / 移动。</p>
+<pre><code class="python">import os
+
+def get_file_path(path1, list2, list4):
+    list_1 = os.listdir(path1)
+    for i in range(len(list_1)):
+        list_1[i] = ph.join(path1, list_1[i])
+        if ph.isfile(list_1[i]):
+            list2.append(list_1[i])
+        else:
+            list4.append(list_1[i])
+            get_file_path(list_1[i], list2, list4)
+
+def make_directories(list4, path2):
+    list4.sort(key=lambda x:x.count(&#39;\\&#39;))
+    files_name = list4[0]
+    files_name = files_name[files_name.rfind(&#39;\\&#39;)+1:]
+    path2 = path2 + &#39;\\&#39; + files_name
+    for i in range(len(list4)):
+        str_1 = list4[i]
+        str_2 = path2 + str_1[str_1.find(files_name)+len(files_name):]
+        list4[i] = str_2
+        os.mkdir(list4[i])
+
+def copy_files(list4, list2, path2, key_word):
+    files_name = list4[0]
+    files_name = files_name[files_name.rfind(&#39;\\&#39;) + 1:]
+    path2 = path2 + &#39;\\&#39; + files_name
+    list2.sort(key=lambda x:x.count(&#39;\\&#39;))
+    for i in range(len(list2)):
+        if key_word == ph.splitext(list2[i])[1]:
+            str_1 = list2[i]
+            str_2 = path2 + str_1[str_1.find(files_name)+len(files_name):]
+            print(&#39;正在复制文件%s到%s当中&#39;%(list2[i], str_2))
+            with open(list2[i], &#39;rb&#39;) as f:
+                content = f.read()
+            with open(str_2, &#39;wb&#39;) as f:
+                f.write(content)
+
+if __name__ == &#39;__main__&#39;:
+    list2 = []; list4 = []
+    path1 = input(&#39;请输入你想复制的文件夹的绝对路径:&#39;)
+    list4.append(path1)
+    get_file_path(path1, list2, list4)
+    path2 = input(&#39;请输入你想复制进的文件夹的绝对路径:&#39;)
+    make_directories(list4, path2)
+    key_word = input(&#39;请输入你想复制文件的后缀名:&#39;)
+    copy_files(list4, list2, path2, key_word)
+    
+</code></pre>
+<h3 id="3-将文件夹中所有文件提取到指定文件夹"><a href="#3-将文件夹中所有文件提取到指定文件夹" class="headerlink" title="3. 将文件夹中所有文件提取到指定文件夹"></a>3. 将文件夹中所有文件提取到指定文件夹</h3><p>此程序适用于所有文件夹结构。</p>
+<p>且此程序通过复制方式提取文件，而非移动。</p>
+<pre><code class="python">import os, shutil
+
+def copy_file(path1, path2):
+    for foldName, subfolders, filenames in os.walk(path1):
+        for filename in filenames:
+            shutil.copyfile(os.path.join(foldName, filename), os.path.join(path2, filename))
+            print(filename, &quot;已复制完成&quot;)
+
+if __name__ == &#39;__main__&#39;:
+    path1 = input(&quot;请输入你想复制的文件夹的绝对路径：&quot;)
+    path2 = input(&quot;请输入你想复制进的文件夹的绝对路径：&quot;)
+    copy_file(path1, path2)
+    
+</code></pre>
+<h3 id="4-提取文件夹中文件创建-修改-日期至Excel表"><a href="#4-提取文件夹中文件创建-修改-日期至Excel表" class="headerlink" title="4. 提取文件夹中文件创建(修改)日期至Excel表"></a>4. 提取文件夹中文件创建(修改)日期至Excel表</h3><p>此程序只适用于一层文件夹包含所有指定文件的文件夹结构。</p>
+<pre><code class="python">import os, time
+import pandas as pd
+
+def get_time(path1, path2, excelName):
+    filenames = []
+    cTimes = []
+    mTimes = []
+    files = os.listdir(path1)
+    for file in files:
+        fp = os.path.join(path1, file)
+        createdTime = time.localtime(os.stat(fp).st_ctime)
+        modifiedTime = time.localtime(os.stat(fp).st_mtime)
+        cTime = time.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;, createdTime)
+        mTime = time.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;, modifiedTime)
+        filenames.append(file)
+        cTimes.append(cTime)
+        mTimes.append(mTime)
+    d = &#123;&quot;文件名称&quot;:filenames, &quot;创建时间&quot;:cTimes, &quot;修改时间&quot;:mTimes&#125;
+    df = pd.DataFrame(d)
+    df.to_excel(path2 + &quot;\\&quot; + excelName)
+
+if __name__ == &#39;__main__&#39;:
+    path1 = input(&quot;请输入文件所在的文件夹的绝对路径：&quot;)
+    path2 = input(&quot;请输入文件创建时间提取后的Excel表所在的文件夹的绝对路径：&quot;)
+    excelName = input(&quot;请输入想创建的Excel名称(后缀名也要写，如.xlsx)：&quot;)
+    get_time(path1, path2, excelName)
+    print(&quot;提取完成！&quot;)
+    
+</code></pre>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>实用脚本</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python numpy.abs和abs函数别再傻傻分不清了 [转载]</title>
+    <url>/2022/10/01/def_abs/</url>
+    <content><![CDATA[<h1 id="Python-numpy-abs和abs函数别再傻傻分不清了-转载"><a href="#Python-numpy-abs和abs函数别再傻傻分不清了-转载" class="headerlink" title="Python numpy.abs和abs函数别再傻傻分不清了 [转载]"></a>Python numpy.abs和abs函数别再傻傻分不清了 [转载]</h1><p>原文链接：<a href="https://blog.csdn.net/m0_49028841/article/details/120889467">https://blog.csdn.net/m0_49028841/article/details/120889467</a></p>
+<p>[TOC]</p>
+<h2 id="说在最前"><a href="#说在最前" class="headerlink" title="说在最前"></a>说在最前</h2><p>不知道小伙伴们在写代码的时候有没有区分开numpy.abs和abs函数，别小看这两个函数，如果在写程序的时候正确区分使用这两个函数可以使自己的程序运行效率大大提升。</p>
+<p>别看这两个函数都能对整数求绝对值，但他们俩的返回值类型完全不一样，如果傻傻地混为一谈，将会使你的程序运行时间被大大拖累！</p>
+<p>今天笔者就带小伙伴们看看，这两个函数究竟该怎么正确使用才能使自己的程序运行效率得到提升。</p>
+<h2 id="先看示例程序-abs-函数"><a href="#先看示例程序-abs-函数" class="headerlink" title="先看示例程序-abs()函数"></a>先看示例程序-abs()函数</h2><p>注意观察变量row和语句temp=row-1</p>
+<pre><code class="python">import time
+
+row=-1000
+row=abs(row)  #这里的函数是abs()
+
+start_time = time.time()#记录程序运行到这（记为A）的时间
+
+for i in range(row):
+    for j in range(1000):
+        temp=row-1    #temp在这里只是用来接收row-1的结果
+
+end_time = time.time()#记录程序运行到这（记为B）的时间
+print(end_time-start_time)#输出A和B代码间的程序运行时间
+</code></pre>
+<p><strong>运行时间为：0.08079314231872559</strong></p>
+<h2 id="再看示例程序-numpy-abs-函数"><a href="#再看示例程序-numpy-abs-函数" class="headerlink" title="再看示例程序-numpy.abs()函数"></a>再看示例程序-numpy.abs()函数</h2><p>注意观察变量row和语句temp=row-1</p>
+<pre><code class="python">import numpy
+import time
+
+row=-1000
+row=numpy.abs(row)   #这里的函数是numpy.abs()
+
+start_time = time.time()#记录程序运行到这（记为A）的时间
+
+for i in range(row):
+    for j in range(1000):
+        temp=row-1    #temp在这里只是用来接收row-1的结果
+
+end_time = time.time()#记录程序运行到这（记为B）的时间
+print(end_time-start_time)#输出A和B代码间的程序运行时间
+</code></pre>
+<p><strong>运行时间为：0.20246124267578125</strong></p>
+<h2 id="观察两个程序的结果"><a href="#观察两个程序的结果" class="headerlink" title="观察两个程序的结果"></a>观察两个程序的结果</h2><p>观察两个程序的相同代码段运行时间的结果，你会发现作用都是用来取整的abs()函数和numpy.abs()函数，运行时间竟然差了大约2.5倍！</p>
+<p>小伙伴们看到这里是不是十分惊讶和不解？为什么相同的代码段运行时间竟然大不相同？虽然在本文章中，它们的相同代码段运行时间只差了0点几秒，但是在做数据处理时，庞大的数据处理足足可以使这微小的差距瞬间拉大，造成本来可以几秒钟运行结束的程序你却用了几分钟跑完的尴尬局面。</p>
+<h2 id="分析解释"><a href="#分析解释" class="headerlink" title="分析解释"></a>分析解释</h2><p>注意观察两个程序的变量row，<br>第一个程序</p>
+<pre><code class="python">row=abs(row)
+</code></pre>
+<p>第二个程序</p>
+<pre><code class="python">row=numpy.abs(row)
+</code></pre>
+<p>小伙伴们第一眼看好像这两个函数除了外貌不同外，也没啥不同，都是对变量row取绝对值，但是这两个函数恰恰在返回值类型上不同。abs()函数返回的类型是int型而numpy.abs()函数返回的类型却是ndarray。小伙伴们可以使用Type()函数来看变量row的类型，或者去numpy的官网看一下numpy.abs()函数的说明，链接附上：<a href="https://docs.scipy.org/doc/numpy-1.15.0/reference/generated/numpy.absolute.html?highlight=numpy%20abs">numpy.abs()函数官方说明</a></p>
+<p>int类型这里不做过多解释，有兴趣的小伙伴可以自己去了解相关知识。<br>而ndarray类型，是numpy库里的数组类型，它是numpy库里的一种类(numpy.ndarray)，小伙伴们可以去官网上看看有关ndarray类型的说明。链接附上：<a href="https://docs.scipy.org/doc/numpy-1.15.0/reference/generated/numpy.ndarray.html?highlight=ndarray#numpy.ndarray">numpy.ndarray类型官方说明</a></p>
+<p>有了上面的基础，我们再来理解为什么会出现相同代码段运行时间不同就变得容易许多了。其主要原因在于</p>
+<pre><code class="python">temp=row-1
+</code></pre>
+<p>这段代码。如果row变量是ndarray类型，那么ndarray类型减去int类型（常量1是int类型）就会存在不同类型间的变量进行转换的问题（这种转换是系统自己完成的，也可以称之为隐藏式地转换），这会使程序有额外的开销，使程序的运行效率降低。而如果row变量是int类型就不会出现这种问题，所以这就是使两段相同的代码运行时间不同的根本原因所在。</p>
+<p>另外numpy.abs()函数希望的参数类型是ndarray类型，而abs()函数希望的参数类型之一是int类型，所以numpy.abs(row)和abs(row)也存在上述问题。</p>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><p>虽然numpy.abs()函数对单个元素（整型、浮点型等等）的处理较abs()函数慢，但如果元素很多，可以把这些元素组合起来形成一个ndarray类型数组，这时使用numpy.abs()函数（ndarray类型做实际参数）就要比用abs()函数循环处理快得多啦。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>单个元素用abs()函数<br>多个元素并行处理用numpy.abs()函数<br>使用函数和写代码时一定要注意变量隐藏式地转换，因为这能在无形之中拖慢你程序的运行速度。</p>
+<p>如果这篇文章对你有所启发和帮助，就麻烦小伙伴们多多支持，为我点个赞，多多关注我哦~</p>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2022/09/25/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>

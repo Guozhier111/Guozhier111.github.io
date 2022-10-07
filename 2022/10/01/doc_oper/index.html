@@ -1,0 +1,327 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+        <title>通过Python完成在实际工作中对文件目录操作的4种特定需求 [转载] | 果汁儿 De 小窝</title>
+        <meta name="author" content="果汁儿">
+        <meta name="description" content="早日上岸！">
+        <meta name="keywords" content="">
+        <link rel="icon" href="/img/huaijiajia.jpg">
+        <script src="https://cdn.staticfile.org/instant.page/5.1.0/instantpage.min.js" type="module"></script>
+        <script src="https://cdn.staticfile.org/font-awesome/6.2.0/js/all.min.js"></script>
+        
+        <link rel="stylesheet" href="/css/fonts.min.css">
+        <link rel="stylesheet" href="/css/particlex.css">
+        
+        <script src="https://cdn.staticfile.org/vue/3.2.33/vue.global.prod.min.js"></script>
+    <meta name="generator" content="Hexo 5.4.2"></head>
+    <body>
+        <div id="loading" style="height:100vh;width:100vw;position:fixed;display:flex;z-index:200;justify-content:space-between;background:#fff;transition:opacity 0.3s ease-out"><div style="position:fixed;height:100vh;width:100vw;display:flex;justify-content:center;align-items:center"><div id="loadcontent" style="width:50vmin;height:50vmin;padding:50px;border-radius:50%;display:flex;justify-content:center;align-items:center;border:solid 10px #a3ddfb;text-align:center"><div><h2>LOADING...</h2><p style="word-break:keep-all">加载过慢请开启缓存(浏览器默认开启)</p><div><img alt="loading" src="/loading.gif"></div></div></div></div></div>
+        <div id="layout">
+            <i data-fa-symbol="calendar-solid" class="fa-solid fa-calendar fa-fw"></i>
+            <i data-fa-symbol="bookmark-solid" class="fa-solid fa-bookmark fa-fw"></i>
+            <i data-fa-symbol="tags-solid" class="fa-solid fa-tags fa-fw"></i>
+            <transition name="into">
+                <div v-show="show_page" style="display: -not-none">
+                    <div id="menu_show">
+                         
+<nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">果汁儿 de 小窝</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;about</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;archives</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;categories</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;tags</span>
+        </a>
+        
+    </div>
+    <div :class="'phone-menu ' + menu_show" id="phone-menu">
+        <div class="curtain" @click="menu_show = !menu_show" v-show="menu_show"></div>
+        <div :class="'title'" @click="menu_show = !menu_show">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;果汁儿 de 小窝</span>
+        </div>
+        <transition name="slide">
+        <div class="items" v-show="menu_show">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-house fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-id-card fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">about</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-box-archive fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">archives</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-bookmark fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">categories</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-tags fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">tags</div>
+                </div>
+            </a>
+            
+        </div>
+        </transition>
+    </div>
+</nav>
+                    </div>
+                    <div id="main">
+                        
+<div class="article">
+    <div>
+        <h1>通过Python完成在实际工作中对文件目录操作的4种特定需求 [转载] </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <svg class="fa-icon"><use xlink:href="#calendar-solid"></use></svg>
+            </span>
+            2022/10/1
+        </span>
+        
+        <span class="category">
+            <a href="/categories/学习笔记/">
+                <span class="icon">
+                    <svg class="fa-icon"><use xlink:href="#bookmark-solid"></use></svg>
+                </span>
+                学习笔记
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <svg class="fa-icon"><use xlink:href="#tags-solid"></use></svg>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/python/" style="color: #00a596">
+                    python
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/实用脚本/" style="color: #ff7d73">
+                    实用脚本
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    <div class="content" v-pre>
+        <h1 id="通过Python完成在实际工作中关于文件目录操作的4种特定需求-转载"><a href="#通过Python完成在实际工作中关于文件目录操作的4种特定需求-转载" class="headerlink" title="通过Python完成在实际工作中关于文件目录操作的4种特定需求 [转载]"></a>通过Python完成在实际工作中关于文件目录操作的4种特定需求 [转载]</h1><p>原文链接：<a target="_blank" rel="noopener" href="https://rimbaud-lee.github.io/2021/08/19/Doc_Oper/">邓小闲的小楼 (rimbaud-lee.github.io)</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>对于工作时上级安排给你的繁复琐碎的重复性工作，为何不让机器去做本该是机器来做的事情。</p>
+<p>人生苦短，你用Python。</p>
+<p>另，此程序无需修改源码，任意一台电脑上只要搭建环境，双击程序及可运行。</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>Python3</p>
+<h2 id="具体需求"><a href="#具体需求" class="headerlink" title="具体需求"></a>具体需求</h2><h3 id="1-将文件夹中特定格式文件提取到指定文件夹"><a href="#1-将文件夹中特定格式文件提取到指定文件夹" class="headerlink" title="1. 将文件夹中特定格式文件提取到指定文件夹"></a>1. 将文件夹中特定格式文件提取到指定文件夹</h3><p>不论文件夹结构有多复杂，此程序适用于所有文件夹结构。</p>
+<p>且此程序通过复制方式提取文件，而非移动。</p>
+<pre><code class="python"># os库进行目录提取，shutil库进行文件复制
+import os, shutil
+
+def copy_file(path1, path2, key_word):
+    # num的引入是为了防止重名文件的出现，若特定格式文件不存在同名现象，大可去除num
+    num = 1
+    for foldName, subfolders, filenames in os.walk(path1):
+        for filename in filenames:
+            if filename.endswith(key_word):
+                new_name = filename.replace(filename, &quot;%i&quot;+&quot;_&quot;+filename)%num
+                shutil.copyfile(os.path.join(foldName, filename), os.path.join(path2, new_name))
+                print(filename, &quot;copy as&quot;, new_name)
+                num += 1
+
+if __name__ == &#39;__main__&#39;:
+    path1 = input(&quot;请输入你想复制的文件夹的绝对路径：&quot;)
+    path2 = input(&quot;请输入你想复制进的文件夹的绝对路径：&quot;)
+    key_word = input(&quot;请输入你想复制文件的后缀名：&quot;)
+    copy_file(path1, path2, key_word)
+    
+</code></pre>
+<h3 id="2-将文件夹特定格式文件按原文件夹目录格式提取到指定文件夹"><a href="#2-将文件夹特定格式文件按原文件夹目录格式提取到指定文件夹" class="headerlink" title="2. 将文件夹特定格式文件按原文件夹目录格式提取到指定文件夹"></a>2. 将文件夹特定格式文件按原文件夹目录格式提取到指定文件夹</h3><p>此程序适用于所有文件夹结构。</p>
+<p>且此程序通过重新写入文件方式提取文件，而非复制 / 移动。</p>
+<pre><code class="python">import os
+
+def get_file_path(path1, list2, list4):
+    list_1 = os.listdir(path1)
+    for i in range(len(list_1)):
+        list_1[i] = ph.join(path1, list_1[i])
+        if ph.isfile(list_1[i]):
+            list2.append(list_1[i])
+        else:
+            list4.append(list_1[i])
+            get_file_path(list_1[i], list2, list4)
+
+def make_directories(list4, path2):
+    list4.sort(key=lambda x:x.count(&#39;\\&#39;))
+    files_name = list4[0]
+    files_name = files_name[files_name.rfind(&#39;\\&#39;)+1:]
+    path2 = path2 + &#39;\\&#39; + files_name
+    for i in range(len(list4)):
+        str_1 = list4[i]
+        str_2 = path2 + str_1[str_1.find(files_name)+len(files_name):]
+        list4[i] = str_2
+        os.mkdir(list4[i])
+
+def copy_files(list4, list2, path2, key_word):
+    files_name = list4[0]
+    files_name = files_name[files_name.rfind(&#39;\\&#39;) + 1:]
+    path2 = path2 + &#39;\\&#39; + files_name
+    list2.sort(key=lambda x:x.count(&#39;\\&#39;))
+    for i in range(len(list2)):
+        if key_word == ph.splitext(list2[i])[1]:
+            str_1 = list2[i]
+            str_2 = path2 + str_1[str_1.find(files_name)+len(files_name):]
+            print(&#39;正在复制文件%s到%s当中&#39;%(list2[i], str_2))
+            with open(list2[i], &#39;rb&#39;) as f:
+                content = f.read()
+            with open(str_2, &#39;wb&#39;) as f:
+                f.write(content)
+
+if __name__ == &#39;__main__&#39;:
+    list2 = []; list4 = []
+    path1 = input(&#39;请输入你想复制的文件夹的绝对路径:&#39;)
+    list4.append(path1)
+    get_file_path(path1, list2, list4)
+    path2 = input(&#39;请输入你想复制进的文件夹的绝对路径:&#39;)
+    make_directories(list4, path2)
+    key_word = input(&#39;请输入你想复制文件的后缀名:&#39;)
+    copy_files(list4, list2, path2, key_word)
+    
+</code></pre>
+<h3 id="3-将文件夹中所有文件提取到指定文件夹"><a href="#3-将文件夹中所有文件提取到指定文件夹" class="headerlink" title="3. 将文件夹中所有文件提取到指定文件夹"></a>3. 将文件夹中所有文件提取到指定文件夹</h3><p>此程序适用于所有文件夹结构。</p>
+<p>且此程序通过复制方式提取文件，而非移动。</p>
+<pre><code class="python">import os, shutil
+
+def copy_file(path1, path2):
+    for foldName, subfolders, filenames in os.walk(path1):
+        for filename in filenames:
+            shutil.copyfile(os.path.join(foldName, filename), os.path.join(path2, filename))
+            print(filename, &quot;已复制完成&quot;)
+
+if __name__ == &#39;__main__&#39;:
+    path1 = input(&quot;请输入你想复制的文件夹的绝对路径：&quot;)
+    path2 = input(&quot;请输入你想复制进的文件夹的绝对路径：&quot;)
+    copy_file(path1, path2)
+    
+</code></pre>
+<h3 id="4-提取文件夹中文件创建-修改-日期至Excel表"><a href="#4-提取文件夹中文件创建-修改-日期至Excel表" class="headerlink" title="4. 提取文件夹中文件创建(修改)日期至Excel表"></a>4. 提取文件夹中文件创建(修改)日期至Excel表</h3><p>此程序只适用于一层文件夹包含所有指定文件的文件夹结构。</p>
+<pre><code class="python">import os, time
+import pandas as pd
+
+def get_time(path1, path2, excelName):
+    filenames = []
+    cTimes = []
+    mTimes = []
+    files = os.listdir(path1)
+    for file in files:
+        fp = os.path.join(path1, file)
+        createdTime = time.localtime(os.stat(fp).st_ctime)
+        modifiedTime = time.localtime(os.stat(fp).st_mtime)
+        cTime = time.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;, createdTime)
+        mTime = time.strftime(&#39;%Y-%m-%d %H:%M:%S&#39;, modifiedTime)
+        filenames.append(file)
+        cTimes.append(cTime)
+        mTimes.append(mTime)
+    d = &#123;&quot;文件名称&quot;:filenames, &quot;创建时间&quot;:cTimes, &quot;修改时间&quot;:mTimes&#125;
+    df = pd.DataFrame(d)
+    df.to_excel(path2 + &quot;\\&quot; + excelName)
+
+if __name__ == &#39;__main__&#39;:
+    path1 = input(&quot;请输入文件所在的文件夹的绝对路径：&quot;)
+    path2 = input(&quot;请输入文件创建时间提取后的Excel表所在的文件夹的绝对路径：&quot;)
+    excelName = input(&quot;请输入想创建的Excel名称(后缀名也要写，如.xlsx)：&quot;)
+    get_time(path1, path2, excelName)
+    print(&quot;提取完成！&quot;)
+    
+</code></pre>
+
+    </div>
+    
+    
+</div>
+                         
+<footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2022 - 2022 果汁儿 de 小窝
+            <span class="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            @果汁儿
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo Engine</a> & <a
+                target="_blank" rel="noopener" href="https://github.com/argvchs/hexo-theme-particlex">ParticleX Theme</a></div>
+        
+    </div>
+</footer>
+                    </div>
+                </div>
+            </transition>
+            <div id="img_show">
+                <img id="img_content" alt="img_show">
+            </div>
+        </div>
+        <script src="https://cdn.staticfile.org/highlight.js/11.5.1/highlight.min.js"></script>
+        <script src="/js/particlex.js"></script>
+        <script src="/js/showimg.js"></script>
+        
+
+    </body>
+</html>
